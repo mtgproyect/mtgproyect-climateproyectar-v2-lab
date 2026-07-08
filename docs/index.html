@@ -368,8 +368,8 @@
 
             <p class="section-copy">Animación de radar con productos oficiales. Usá el selector para cambiar entre mosaicos nacionales y radares individuales.</p>
 
-            <article class="card viewer-card">
-              <div class="viewer-stage">
+            <article class="card viewer-card radar-viewer-card">
+              <div class="viewer-stage radar-viewer-stage">
                 <img id="radar-image" alt="Imagen de radar meteorológico" referrerpolicy="no-referrer">
                 <div id="radar-loading" class="viewer-loading">Cargando radar…</div>
               </div>
@@ -382,6 +382,26 @@
                   <span id="radar-frame-count">—</span>
                 </div>
                 <span id="radar-status" class="status-badge">Sin cargar</span>
+              </div>
+            </article>
+
+            <article class="radar-scale-card" aria-label="Referencia de colores del radar">
+              <div>
+                <p class="eyebrow">Referencia rápida</p>
+                <h4>Intensidad de precipitación</h4>
+                <p>La escala dBZ ayuda a interpretar la señal del radar: azul y verde suelen indicar ecos débiles o moderados; amarillo, naranja, rojo y violeta indican núcleos más intensos.</p>
+              </div>
+              <div class="radar-scale-wrap">
+                <div class="radar-scale-bar" aria-hidden="true"></div>
+                <div class="radar-scale-labels">
+                  <span>-15</span>
+                  <span>0</span>
+                  <span>15</span>
+                  <span>30</span>
+                  <span>45</span>
+                  <span>60</span>
+                  <span>75 dBZ</span>
+                </div>
               </div>
             </article>
           </section>
@@ -397,8 +417,8 @@
 
             <p class="section-copy">Imágenes satelitales de topes nubosos para seguir nubosidad, frentes y sistemas que afectan Argentina.</p>
 
-            <article class="card viewer-card">
-              <div class="viewer-stage">
+            <article class="card viewer-card satellite-viewer-card">
+              <div class="viewer-stage satellite-viewer-stage">
                 <img id="satellite-image" alt="Imagen satelital meteorológica" referrerpolicy="no-referrer">
                 <div id="satellite-loading" class="viewer-loading">Cargando satélite…</div>
               </div>

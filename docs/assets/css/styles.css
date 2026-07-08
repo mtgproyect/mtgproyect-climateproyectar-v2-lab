@@ -2902,3 +2902,184 @@ a {
   .mini-day { flex-basis: 158px; }
   .forecast-icon.weather-icon-svg { width: 62px; height: 62px; }
 }
+
+/* =========================================================
+   Ajuste profesional para visores de radar y satélite
+   - El contenedor se adapta al aspecto real de cada imagen.
+   - Se elimina el fondo negro sobrante y se usa un marco claro integrado.
+   - Se agrega una referencia dBZ legible para radar.
+   ========================================================= */
+.viewer-card {
+  overflow: hidden;
+  border-color: rgba(196, 211, 220, 0.9);
+  background: #eef5f8;
+  box-shadow: 0 20px 55px rgba(3, 24, 39, 0.12);
+}
+
+.viewer-stage {
+  --viewer-aspect: 1.172;
+  position: relative;
+  display: grid;
+  width: 100%;
+  min-height: 0 !important;
+  aspect-ratio: var(--viewer-aspect);
+  place-items: center;
+  overflow: hidden;
+  padding: clamp(6px, 0.9vw, 12px);
+  background:
+    linear-gradient(180deg, rgba(255,255,255,0.64), rgba(226,236,241,0.78)),
+    #e8eef2 !important;
+}
+
+.radar-viewer-stage { --viewer-aspect: 1.172; }
+.satellite-viewer-stage { --viewer-aspect: 1.161; }
+
+.viewer-stage::before {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 50% 16%, rgba(54, 184, 214, 0.10), transparent 32rem),
+    linear-gradient(90deg, rgba(255,255,255,0.16), transparent 18%, transparent 82%, rgba(255,255,255,0.12));
+  content: "";
+}
+
+.viewer-stage img {
+  position: relative;
+  z-index: 2;
+  display: block;
+  width: 100%;
+  height: 100%;
+  min-height: 0 !important;
+  max-height: min(78vh, 920px);
+  object-fit: contain;
+  border-radius: 14px;
+  background: #e8eef2;
+  box-shadow: 0 8px 28px rgba(3, 24, 39, 0.10);
+}
+
+.viewer-stage.viewer-ready img {
+  animation: viewer-frame-in 0.28s ease both;
+}
+
+@keyframes viewer-frame-in {
+  from { opacity: 0.72; transform: scale(0.995); }
+  to { opacity: 1; transform: none; }
+}
+
+.viewer-loading {
+  z-index: 5;
+  background: rgba(235, 244, 248, 0.84) !important;
+  color: var(--primary-dark) !important;
+  backdrop-filter: blur(8px);
+}
+
+.viewer-toolbar {
+  position: relative;
+  z-index: 3;
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(14px);
+}
+
+.radar-scale-card {
+  display: grid;
+  grid-template-columns: minmax(240px, 0.95fr) minmax(260px, 1.05fr);
+  gap: clamp(14px, 2vw, 24px);
+  align-items: center;
+  margin-top: 12px;
+  padding: clamp(15px, 2vw, 20px);
+  border: 1px solid rgba(196, 211, 220, 0.88);
+  border-radius: 18px;
+  background:
+    radial-gradient(circle at 100% 0%, rgba(54, 184, 214, 0.10), transparent 18rem),
+    rgba(255, 255, 255, 0.88);
+  box-shadow: 0 12px 32px rgba(3, 24, 39, 0.07);
+}
+
+.radar-scale-card h4 {
+  margin: 0 0 5px;
+  color: var(--text);
+  font-size: 1rem;
+  letter-spacing: -0.025em;
+}
+
+.radar-scale-card p:not(.eyebrow) {
+  max-width: 620px;
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.82rem;
+  line-height: 1.55;
+}
+
+.radar-scale-wrap {
+  min-width: 0;
+}
+
+.radar-scale-bar {
+  height: 18px;
+  overflow: hidden;
+  border: 1px solid rgba(16, 35, 52, 0.18);
+  border-radius: 999px;
+  background: linear-gradient(90deg,
+    #3f4b78 0%,
+    #4279a6 16%,
+    #21a6ce 30%,
+    #2bb95f 44%,
+    #c8de31 58%,
+    #f2a51c 70%,
+    #dc242b 82%,
+    #c700c7 92%,
+    #d8fff2 100%);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.5), 0 8px 20px rgba(3, 24, 39, 0.10);
+}
+
+.radar-scale-labels {
+  display: flex;
+  justify-content: space-between;
+  gap: 5px;
+  margin-top: 7px;
+  color: #4f6575;
+  font-size: 0.7rem;
+  font-weight: 900;
+}
+
+@media (max-width: 900px) {
+  .radar-scale-card {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 720px) {
+  .viewer-stage {
+    padding: 5px;
+    border-radius: 18px 18px 0 0;
+  }
+
+  .viewer-stage img {
+    max-height: 58vh;
+    border-radius: 12px;
+  }
+
+  .viewer-toolbar {
+    flex-wrap: wrap;
+  }
+
+  .viewer-timeline {
+    flex-basis: calc(100% - 112px);
+  }
+
+  .radar-scale-card {
+    margin-top: 10px;
+    border-radius: 16px;
+  }
+}
+
+@media (max-width: 460px) {
+  .viewer-stage img {
+    max-height: 52vh;
+  }
+
+  .radar-scale-labels {
+    font-size: 0.62rem;
+  }
+}

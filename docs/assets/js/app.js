@@ -939,6 +939,14 @@
       image.src = frame.url;
       image.referrerPolicy = "no-referrer";
       image.alt = `${kind === "radar" ? "Radar" : "Satélite"} · ${formatDateTime(frame.timestamp)}`;
+      const stage = image.closest(".viewer-stage");
+      if (stage && preload.naturalWidth && preload.naturalHeight) {
+        const aspect = preload.naturalWidth / preload.naturalHeight;
+        stage.style.setProperty("--viewer-aspect", String(aspect));
+        stage.dataset.imageWidth = String(preload.naturalWidth);
+        stage.dataset.imageHeight = String(preload.naturalHeight);
+        stage.classList.add("viewer-ready");
+      }
       loading.hidden = true;
       time.textContent = frame.timestamp ? formatDateTime(frame.timestamp) : frame.filename;
       count.textContent = `Cuadro ${model.index + 1} de ${model.frames.length}`;
@@ -1018,8 +1026,23 @@
         groups.mosaic.length ? `<optgroup label="Mosaicos">${groups.mosaic.map((item) => `<option value="${escapeHtml(item.id)}">${escapeHtml(item.name)}${item.status === "no_data" ? " · sin datos" : ""}</option>`).join("")}</optgroup>` : "",
         groups.radar.length ? `<optgroup label="Radares individuales">${groups.radar.map((item) => `<option value="${escapeHtml(item.id)}">${escapeHtml(item.name)}${item.province ? ` · ${escapeHtml(item.province)}` : ""}${item.status === "no_data" ? " · sin datos" : ""}</option>`).join("")}</optgroup>` : "",
       ].join("");
+      const hasFrames = (item) => {
+        const frames = item?.animation_frames?.length ? item.animation_frames : item?.frames;
+        return Array.isArray(frames) && frames.some((frame) => frame?.url);
+      };
+      const centerMosaic = products.find((item) => {
+        if (item.type !== "mosaic" || !hasFrames(item)) return false;
+        const haystack = normalizeText(`${item.id || ""} ${item.name || ""}`);
+        return haystack.includes("mosaico centro")
+          || haystack.includes("centro")
+          || haystack.includes("comp cen")
+          || haystack.includes("comp_cen");
+      });
       const preferredProduct = products.find((item) => String(item.id) === String(previousProduct))?.id
+        || centerMosaic?.id
+        || products.find((item) => item.type === "mosaic" && hasFrames(item))?.id
         || products.find((item) => item.id === "COMP_ARG")?.id
+        || products.find(hasFrames)?.id
         || products[0]?.id;
       chooseRadarProduct(preferredProduct);
     } catch (error) {
