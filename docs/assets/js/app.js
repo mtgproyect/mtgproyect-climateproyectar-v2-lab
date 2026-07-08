@@ -942,9 +942,16 @@
       const stage = image.closest(".viewer-stage");
       if (stage && preload.naturalWidth && preload.naturalHeight) {
         const aspect = preload.naturalWidth / preload.naturalHeight;
-        stage.style.setProperty("--viewer-aspect", String(aspect));
+        if (kind === "satellite") {
+          stage.style.setProperty("--viewer-aspect", String(aspect));
+        } else {
+          stage.style.removeProperty("--viewer-aspect");
+        }
         stage.dataset.imageWidth = String(preload.naturalWidth);
         stage.dataset.imageHeight = String(preload.naturalHeight);
+        stage.dataset.imageAspect = String(aspect);
+        stage.classList.toggle("viewer-portrait", aspect < 0.9);
+        stage.classList.toggle("viewer-wide", aspect > 1.35);
         stage.classList.add("viewer-ready");
       }
       loading.hidden = true;
@@ -1012,7 +1019,7 @@
     const force = options.force === true;
     if ((state.radarLoaded && !force) || state.config.radar?.enabled === false) return;
     try {
-      const previousProduct = options.productId || elements.radarProduct.value;
+      const requestedProduct = options.productId ? String(options.productId) : "";
       const manifest = options.manifest || state.radarManifest || await fetchJson(joinUrl(state.config.radar.base_url, state.config.radar.manifest || "manifiesto.json"), { cacheKey: "radar-manifest" });
       state.radarManifest = manifest;
       state.radarLoaded = true;
@@ -1030,15 +1037,28 @@
         const frames = item?.animation_frames?.length ? item.animation_frames : item?.frames;
         return Array.isArray(frames) && frames.some((frame) => frame?.url);
       };
+      const radarProductText = (item) => {
+        const frames = item?.animation_frames?.length ? item.animation_frames : item?.frames;
+        const frameText = Array.isArray(frames)
+          ? frames.slice(0, 3).map((frame) => `${frame.filename || ""} ${frame.url || ""}`).join(" ")
+          : "";
+        return normalizeText(`${item?.id || ""} ${item?.name || ""} ${item?.province || ""} ${frameText}`);
+      };
       const centerMosaic = products.find((item) => {
         if (item.type !== "mosaic" || !hasFrames(item)) return false;
-        const haystack = normalizeText(`${item.id || ""} ${item.name || ""}`);
+        const haystack = radarProductText(item);
         return haystack.includes("mosaico centro")
           || haystack.includes("centro")
+          || haystack.includes("central")
           || haystack.includes("comp cen")
-          || haystack.includes("comp_cen");
+          || haystack.includes("comp cen zh")
+          || haystack.includes("cen zh")
+          || haystack.includes("compcen");
       });
-      const preferredProduct = products.find((item) => String(item.id) === String(previousProduct))?.id
+      const requested = requestedProduct
+        ? products.find((item) => String(item.id) === requestedProduct && hasFrames(item))
+        : null;
+      const preferredProduct = requested?.id
         || centerMosaic?.id
         || products.find((item) => item.type === "mosaic" && hasFrames(item))?.id
         || products.find((item) => item.id === "COMP_ARG")?.id
