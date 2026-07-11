@@ -6,13 +6,13 @@
   <meta name="theme-color" content="#071725">
   <meta name="description" content="Condiciones actuales, pronóstico extendido, alertas, radar y satélite para 10.601 localidades argentinas.">
   <meta name="color-scheme" content="light">
-  <meta property="og:title" content="ClimateProyectar">
+  <meta property="og:title" content="WeatherVar">
   <meta property="og:description" content="Información meteorológica argentina basada en datos oficiales del SMN.">
   <meta property="og:type" content="website">
-  <title>ClimateProyectar · Clima en Argentina</title>
+  <title>WeatherVar · Clima en Argentina</title>
 
   <link rel="icon" href="./favicon.svg" type="image/svg+xml">
-  <link rel="preconnect" href="https://raw.githubusercontent.com" crossorigin>
+  <link rel="preconnect" href="https://data.weathervar.com" crossorigin>
   <link rel="preconnect" href="https://unpkg.com" crossorigin>
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
   <link rel="stylesheet" href="./assets/css/styles.css?v=20260704-final">
@@ -43,14 +43,14 @@
 
   <header class="site-header">
     <div class="container header-inner">
-      <a class="brand" href="./" aria-label="Ir al inicio de ClimateProyectar">
+      <a class="brand" href="./" aria-label="Ir al inicio de WeatherVar">
         <span class="brand-mark" aria-hidden="true">
           <span class="brand-orbit"></span>
-          <strong>CP</strong>
+          <strong>WV</strong>
         </span>
         <span>
-          <strong>ClimateProyectar</strong>
-          <small>Información meteorológica argentina</small>
+          <strong>WeatherVar</strong>
+          <small>Clima de Argentina</small>
         </span>
       </a>
 
@@ -184,7 +184,6 @@
             <a class="section-nav-link" href="#tab-alerts">Alertas <span id="alerts-tab-badge" class="tab-badge" hidden></span></a>
             <a class="section-nav-link" href="#tab-radar">Radar</a>
             <a class="section-nav-link" href="#tab-satellite">Satélite</a>
-            <a class="section-nav-link" href="#explore-title">Mapas</a>
           </nav>
 
           <section id="tab-summary" class="weather-section summary-section">
@@ -436,79 +435,6 @@
           </section>
         </section>
 
-        <section class="explore-section" aria-labelledby="explore-title">
-          <div class="explore-heading">
-            <div>
-              <p class="eyebrow">Más herramientas</p>
-              <h2 id="explore-title">Mapas climáticos destacados</h2>
-            </div>
-            <p>
-              Tarjetas visuales de los mapas principales. Tocá una tarjeta para abrir el mapa completo en una pestaña nueva.
-            </p>
-          </div>
-
-          <div class="map-links-grid">
-            <a
-              class="map-link-card world-card"
-              href="https://mtgproyect.github.io/climate-world/"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <div class="map-preview world-preview" aria-hidden="true">
-                <div class="globe-shape">
-                  <span class="globe-continent continent-one"></span>
-                  <span class="globe-continent continent-two"></span>
-                  <span class="globe-continent continent-three"></span>
-                  <span class="wind-line wind-line-one"></span>
-                  <span class="wind-line wind-line-two"></span>
-                  <span class="wind-line wind-line-three"></span>
-                  <span class="rain-blob rain-blob-one"></span>
-                  <span class="rain-blob rain-blob-two"></span>
-                </div>
-              </div>
-              <div class="map-link-copy">
-                <span class="map-link-kicker">Mapa climático</span>
-                <h3>Clima en el mundo</h3>
-                <p>
-                  Precipitación, viento animado, temperatura, presión,
-                  nubosidad y evolución temporal del GFS.
-                </p>
-                <span class="map-link-action">Abrir mapa mundial ↗</span>
-              </div>
-            </a>
-
-            <a
-              class="map-link-card localities-card"
-              href="https://mtgproyect.github.io/climate-localities-map/"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <div class="map-preview localities-preview" aria-hidden="true">
-                <svg class="argentina-shape" viewBox="0 0 180 260" role="img">
-                  <path d="M102 8 88 20 94 34 81 49 88 63 78 79 83 94 75 112 82 130 72 147 77 162 69 181 74 196 66 214 74 230 67 247 82 239 88 219 96 201 101 181 108 164 105 146 113 129 108 111 117 93 111 74 120 57 113 41 122 25 113 13Z"></path>
-                  <circle cx="96" cy="45" r="5"></circle>
-                  <circle cx="92" cy="82" r="5"></circle>
-                  <circle cx="96" cy="118" r="5"></circle>
-                  <circle cx="88" cy="158" r="5"></circle>
-                  <circle cx="83" cy="200" r="5"></circle>
-                </svg>
-                <span class="locality-pulse pulse-one"></span>
-                <span class="locality-pulse pulse-two"></span>
-                <span class="locality-pulse pulse-three"></span>
-              </div>
-              <div class="map-link-copy">
-                <span class="map-link-kicker">Mapa nacional</span>
-                <h3>Clima en todas las localidades</h3>
-                <p>
-                  Mapa nacional con las 10.601 localidades, iconos de
-                  condiciones actuales y estaciones asociadas.
-                </p>
-                <span class="map-link-action">Abrir mapa de localidades ↗</span>
-              </div>
-            </a>
-          </div>
-        </section>
-
         <section class="source-strip source-strip-footer" aria-label="Estado de las fuentes">
           <div class="source-grid">
           <article class="source-card" data-source="observations">
@@ -558,13 +484,13 @@
   <footer class="site-footer">
     <div class="container footer-inner">
       <div>
-        <strong>ClimateProyectar</strong>
+        <strong>WeatherVar</strong>
         <p>
           Información basada en datos oficiales del Servicio Meteorológico
           Nacional. Ante una emergencia, seguí las indicaciones de las autoridades.
         </p>
       </div>
-      <p>ClimateProyectar v2.2 · Interfaz final</p>
+      <p>WeatherVar · Interfaz meteorológica</p>
     </div>
   </footer>
 
