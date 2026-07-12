@@ -85,8 +85,8 @@
   };
 
   const animation = {
-    radar: { frames: [], index: 0, timer: null, playing: true, retries: 0 },
-    satellite: { frames: [], index: 0, timer: null, playing: true, retries: 0 },
+    radar: { frames: [], index: 0, timer: null, playing: false, retries: 0 },
+    satellite: { frames: [], index: 0, timer: null, playing: false, retries: 0 },
   };
 
   const $ = (id) => document.getElementById(id);
@@ -967,7 +967,7 @@
         setViewerStatus(kind, "Cuadro demorado", "delayed");
       }
     };
-    preload.src = withVersion(frame.url, Date.now());
+    preload.src = frame.url;
   }
 
   function startAnimation(kind) {
@@ -991,7 +991,7 @@
     if (model.playing) {
       stopAnimation(kind);
       model.playing = false;
-      play.textContent = "Reproducir";
+      play.textContent = "Animar";
     } else {
       startAnimation(kind);
     }
@@ -1009,7 +1009,9 @@
     setViewerStatus("radar", product.status === "ok" ? "Disponible" : product.status === "delayed" ? "Demorado" : "Sin datos", product.status === "ok" ? "" : "delayed");
     if (animation.radar.frames.length) {
       renderFrame("radar", animation.radar.index);
-      startAnimation("radar");
+      stopAnimation("radar");
+      animation.radar.playing = false;
+      elements.radarPlay.textContent = "Animar";
     } else {
       stopAnimation("radar");
     }
@@ -1086,7 +1088,9 @@
       elements.satelliteUpdated.textContent = manifest.latest?.timestamp_argentina ? `Último cuadro: ${formatDateTime(manifest.latest.timestamp_argentina)}` : `Catálogo: ${formatDateTime(manifest.generated_at)}`;
       if (animation.satellite.frames.length) {
         renderFrame("satellite", animation.satellite.index);
-        startAnimation("satellite");
+        stopAnimation("satellite");
+        animation.satellite.playing = false;
+        elements.satellitePlay.textContent = "Animar";
       } else {
         elements.satelliteLoading.textContent = "No hay cuadros satelitales disponibles.";
         setViewerStatus("satellite", "Sin datos", "delayed");
@@ -1267,7 +1271,7 @@
     elements.errorState.hidden = true;
     elements.resultSection.hidden = false;
     elements.locationTitle.textContent = displayName(row);
-    document.title = `${displayName(row)} | ClimateProyectar`;
+    document.title = `${displayName(row)} | WeatherVar`;
     elements.locationSubtitle.textContent = [row[COL.type], row[COL.department], row[COL.province]].filter(Boolean).join(" · ");
     if (!options.skipUrl) setUrl(Number(id));
     if (options.saveRecent !== false) saveRecent(Number(id));
@@ -1444,7 +1448,7 @@
   async function shareCurrent() {
     const row = state.rowsById.get(state.selectedId);
     if (!row) return;
-    const data = { title: `Clima en ${displayName(row)}`, text: `Consultá el clima de ${displayName(row)} en ClimateProyectar.`, url: window.location.href };
+    const data = { title: `Clima en ${displayName(row)}`, text: `Consultá el clima de ${displayName(row)} en WeatherVar.`, url: window.location.href };
     try {
       if (navigator.share) await navigator.share(data);
       else {
