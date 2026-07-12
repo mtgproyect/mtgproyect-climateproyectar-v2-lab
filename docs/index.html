@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="es-AR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#06243a">
+  <meta name="description" content="Clima actual, pronóstico extendido, alertas, radar y satélite para localidades de Argentina.">
+  <meta property="og:title" content="WeatherVar · Clima en Argentina">
+  <meta property="og:description" content="Información meteorológica para Argentina con datos públicos y actualizaciones automáticas.">
+  <meta property="og:type" content="website">
+  <title>WeatherVar · Clima en Argentina</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="icon" href="./favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="./assets/css/styles.css">
+
+  <link rel="preconnect" href="https://data.weathervar.com" crossorigin>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  <script>
+    (() => {
+      const DEFAULT_LOCALITY_ID = 4864;
+      const url = new URL(window.location.href);
+      if (!url.searchParams.has('id')) {
+        url.searchParams.set('id', String(DEFAULT_LOCALITY_ID));
+        history.replaceState({ localityId: DEFAULT_LOCALITY_ID }, '', url);
+      }
+    })();
+  </script>
+</head>
+<body id="top">
+<a class="skip-link" href="#contenido">Saltar al contenido</a>
+
+<header class="site-header">
+  <div class="top-strip">
+    <div class="container">
+      <span><i class="live-dot"></i> Información meteorológica para Argentina</span>
+      <span>Datos públicos del SMN · Actualizaciones automáticas</span>
+    </div>
+  </div>
+  <div class="container header-main">
+    <a class="brand" href="/" aria-label="WeatherVar inicio"><span class="logo-mark" aria-hidden="true"><svg viewBox="0 0 64 64" role="img"><defs><linearGradient id="g" x1="0" x2="1" y1="0" y2="1"><stop stop-color="#fff"/><stop offset="1" stop-color="#b7edff"/></linearGradient></defs><path fill="url(#g)" d="M25 49h25a10 10 0 0 0 1-20 15 15 0 0 0-28-5 12 12 0 0 0 2 25Z" opacity=".96"/><path fill="#fff" d="M19 30a8 8 0 1 0 0-16 8 8 0 0 0 0 16Zm0-20a2 2 0 0 1-2-2V5a2 2 0 1 1 4 0v3a2 2 0 0 1-2 2Zm0 26a2 2 0 0 1 2 2v3a2 2 0 1 1-4 0v-3a2 2 0 0 1 2-2ZM7 22H4a2 2 0 1 1 0-4h3a2 2 0 1 1 0 4Zm28-4h3a2 2 0 1 1 0 4h-3a2 2 0 0 1 0-4ZM9.8 11.7A2 2 0 0 1 12.6 9l2.1 2.1a2 2 0 1 1-2.8 2.8l-2.1-2.1Zm16.5 16.5a2 2 0 0 1 2.8 0l2.1 2.1a2 2 0 1 1-2.8 2.8L26.3 31a2 2 0 0 1 0-2.8ZM9.8 30.3l2.1-2.1a2 2 0 1 1 2.8 2.8l-2.1 2.1a2 2 0 1 1-2.8-2.8Zm16.5-16.5a2 2 0 0 1 0-2.8L28.4 9a2 2 0 1 1 2.8 2.8l-2.1 2.1a2 2 0 0 1-2.8 0Z" opacity=".92"/></svg></span><span><strong>Weather<span>Var</span></strong><small>Clima de Argentina</small></span></a>
+    <nav class="desktop-nav" aria-label="Menú principal">
+      <a class="nav-link" href="/">Inicio</a>
+      <a class="nav-link" href="https://mapa.weathervar.com/">Mapa nacional</a>
+      <a class="nav-link" href="https://mundo.weathervar.com/">Mundo</a>
+      <div class="nav-menu"><button class="nav-menu-button" type="button">Pronóstico y mapas ▾</button><div class="nav-panel">
+        <a href="./pronostico/">Pronóstico extendido <span>→</span></a>
+        <a href="./alertas/">Alertas meteorológicas <span>→</span></a>
+        <a href="./radar/">Radar de lluvia <span>→</span></a>
+        <a href="./satelite/">Satélite <span>→</span></a>
+        <a href="./clima-por-localidad/">Clima por localidad <span>→</span></a>
+      </div></div>
+      <div class="nav-menu"><button class="nav-menu-button" type="button">Zonas ▾</button><div class="nav-panel">
+        <a href="./amba/">AMBA y Buenos Aires <span>→</span></a>
+        <a href="./costa-atlantica/">Costa Atlántica <span>→</span></a>
+        <a href="./patagonia/">Patagonia <span>→</span></a>
+        <a href="./norte-argentino/">Norte Argentino <span>→</span></a>
+      </div></div>
+      <a class="nav-link" href="./fuentes/">Fuentes</a>
+    </nav>
+    <button class="mobile-toggle" type="button" aria-label="Abrir menú" aria-expanded="false" data-mobile-toggle><span></span><span></span><span></span></button>
+  </div>
+  <div class="mobile-drawer" data-mobile-drawer><div class="mobile-drawer-inner">
+    <a href="/">Inicio</a><a href="https://mapa.weathervar.com/">Mapa nacional</a><a href="https://mundo.weathervar.com/">Mundo</a><a href="./pronostico/">Pronóstico</a><a href="./alertas/">Alertas</a><a href="./radar/">Radar</a><a href="./satelite/">Satélite</a><a href="./clima-por-localidad/">Clima por localidad</a><a href="./fuentes/">Fuentes</a>
+  </div></div>
+</header>
+<main id="contenido">
+  <section class="hero" aria-labelledby="hero-title">
+    <div class="container hero-grid">
+      <div>
+        <p class="hero-kicker">Argentina · cobertura nacional</p>
+        <h1 id="hero-title">El clima <span>en tu localidad</span></h1>
+        <p class="hero-copy">Condiciones actuales, pronóstico extendido, alertas oficiales, radar y satélite.</p>
+      </div>
+      <div class="search-card">
+        <div class="search-card-head"><div><span class="search-kicker">Consulta nacional</span><label for="search-input">Buscar localidad</label></div><span class="search-target" aria-hidden="true">⌖</span></div>
+        <div class="search-row">
+          <div class="search-wrap">
+            <span class="search-icon" aria-hidden="true">⌕</span>
+            <input id="search-input" type="search" autocomplete="off" placeholder="Ej.: Córdoba, Ushuaia, San Rafael…" aria-autocomplete="list" aria-controls="suggestions" aria-expanded="false">
+            <button id="clear-search" class="clear-button" type="button" aria-label="Limpiar búsqueda" hidden>×</button>
+            <div id="suggestions" class="suggestions" role="listbox" hidden></div>
+          </div>
+          <button id="location-button" class="location-button" type="button">◎ Usar mi ubicación</button>
+        </div>
+        <p id="search-status" class="search-status" role="status" aria-live="polite">Preparando Buenos Aires Ciudad (CABA)…</p>
+        <div id="recent-searches" hidden><div id="recent-list"></div></div>
+      </div>
+    </div>
+  </section>
+  <section class="content-main">
+    <div class="container app-card">
+      <section id="empty-state" class="empty-state"><div class="empty-loader" aria-hidden="true"><span></span><span></span><span></span></div><h2>Preparando el clima</h2><p>Cargando catálogo nacional y publicaciones meteorológicas recientes.</p></section>
+      <section id="error-state" class="error-state" hidden><div class="error-icon" aria-hidden="true">!</div><h2>No pudimos preparar la aplicación</h2><p id="error-message">Reintentá en unos minutos.</p><button id="retry-button" class="button" type="button">Reintentar</button></section>
+      <section id="result-section" class="result-shell" hidden aria-live="polite">
+        <div class="location-heading"><div><p class="eyebrow">Localidad seleccionada</p><h2 id="location-title">—</h2><p id="location-subtitle">—</p></div><button id="share-button" class="share-button" type="button">↗ Compartir</button></div>
+        <nav class="section-nav" aria-label="Secciones meteorológicas">
+          <a class="section-nav-link" href="#tab-summary" data-tab="summary">Resumen</a><a class="section-nav-link" href="#tab-forecast" data-tab="forecast">Pronóstico</a><a class="section-nav-link" href="#tab-alerts" data-tab="alerts">Alertas <span id="alerts-tab-badge" class="tab-badge" hidden></span></a><a class="section-nav-link" href="#tab-radar" data-tab="radar">Radar</a><a class="section-nav-link" href="#tab-satellite" data-tab="satellite">Satélite</a><a class="section-nav-link" href="#paginas">Páginas</a>
+        </nav>
+        <section id="tab-summary" class="weather-section summary-section">
+          <div class="summary-grid">
+            <article class="card current-card">
+              <div class="current-main"><div id="current-glyph" class="weather-glyph" aria-hidden="true">◌</div><div class="current-copy"><div class="temperature"><span id="current-temperature">—</span><small>°C</small></div><p id="current-description" class="weather-description">Cargando observación…</p><p id="feels-like" class="muted"></p></div></div>
+              <div class="current-meta"><span id="observation-badge" class="status-badge">Cargando</span><p id="station-source">—</p><p id="observation-time" class="muted">—</p></div>
+            </article>
+            <div class="metrics-grid" aria-label="Detalles de la observación">
+              <article class="metric-card"><span class="metric-symbol" aria-hidden="true">◒</span><span>Humedad</span><strong id="metric-humidity">—</strong></article>
+              <article class="metric-card"><span class="metric-symbol" aria-hidden="true">≋</span><span>Viento</span><strong id="metric-wind">—</strong></article>
+              <article class="metric-card"><span class="metric-symbol" aria-hidden="true">◉</span><span>Presión</span><strong id="metric-pressure">—</strong></article>
+              <article class="metric-card"><span class="metric-symbol" aria-hidden="true">◇</span><span>Visibilidad</span><strong id="metric-visibility">—</strong></article>
+            </div>
+          </div>
+          <div id="summary-alert-banner"></div>
+          <div id="locality-alerts" class="locality-alerts"><p class="loading-text">Cargando alertas de la localidad…</p></div>
+          <article class="card summary-forecast"><div class="section-heading"><div><p class="eyebrow">Próximos días</p><h3>Pronóstico resumido</h3></div><a class="text-button" href="#tab-forecast">Pronóstico completo →</a></div><div id="summary-forecast-grid" class="mini-forecast-grid"><p class="loading-text">Cargando pronóstico…</p></div></article>
+        </section>
+        <section id="tab-forecast" class="weather-section forecast-section"><div class="section-heading"><div><p class="eyebrow">Hasta siete días</p><h3>Pronóstico extendido</h3></div><p id="forecast-updated" class="muted">—</p></div><p class="section-copy">Deslizá para ver máximas, mínimas, lluvia, viento, ráfagas y períodos del día.</p><div id="forecast-notice"></div><div id="forecast-grid" class="forecast-grid"><p class="loading-text">Seleccioná una localidad.</p></div></section>
+        <section id="tab-alerts" class="weather-section alerts-section"><div class="section-heading"><div><p class="eyebrow">Sistema de Alerta Temprana</p><h3>Alertas meteorológicas</h3></div><div class="filter-row"><label>Fecha<select id="alert-date-filter"><option value="">Todas</option></select></label><label>Fenómeno<select id="alert-event-filter"><option value="">Todos</option></select></label></div></div><div class="alert-layout"><article class="card map-card alert-map-card"><div class="alert-map-explainer"><article class="legend-card yellow"><span class="legend-bar"></span><strong>Amarillo</strong><small>Informate y prestá atención a la evolución.</small></article><article class="legend-card orange"><span class="legend-bar"></span><strong>Naranja</strong><small>Fenómenos peligrosos para la sociedad.</small></article><article class="legend-card red"><span class="legend-bar"></span><strong>Rojo</strong><small>Seguí indicaciones oficiales y evitá exponerte.</small></article><article class="legend-card neutral"><span class="legend-bar"></span><strong>Sin alerta</strong><small>Zona sin alerta activa para los filtros elegidos.</small></article></div><p id="map-status" class="map-status">Cargando mapa temático nacional…</p><div id="alert-map" class="alert-map" aria-label="Mapa nacional de alertas"></div></article><article class="card alerts-list-card"><div class="alerts-list-head"><h4>Detalle oficial</h4><p>Alertas activas según los filtros seleccionados.</p></div><div id="alerts-list"><p class="loading-text">Cargando…</p></div></article></div></section>
+        <section id="tab-radar" class="weather-section radar-section"><div class="section-heading"><div><p class="eyebrow">Imágenes oficiales</p><h3>Radar meteorológico</h3></div><label class="product-selector">Producto <select id="radar-product"><option value="">Cargando productos…</option></select></label></div><p class="section-copy">Por defecto se muestra el último cuadro. Tocá Animar para cargar la secuencia.</p><article class="card viewer-card radar-viewer-card"><div class="viewer-stage"><img id="radar-image" alt="Imagen de radar meteorológico" referrerpolicy="no-referrer"><div id="radar-loading" class="viewer-loading">Cargando radar…</div></div><div class="viewer-toolbar"><button id="radar-prev" class="control-button" type="button" aria-label="Cuadro anterior">←</button><button id="radar-play" class="control-button primary-control" type="button">Animar</button><button id="radar-next" class="control-button" type="button" aria-label="Cuadro siguiente">→</button><div class="viewer-timeline"><strong id="radar-frame-time">—</strong><span id="radar-frame-count">—</span></div><span id="radar-status" class="status-badge">Sin cargar</span></div></article><article class="radar-scale-card" aria-label="Referencia de colores del radar"><h4>Intensidad de precipitación</h4><p>La escala dBZ orienta la intensidad: azul/verde ecos débiles o moderados; amarillo, naranja, rojo y violeta núcleos más intensos.</p><div class="radar-scale-wrap"><div class="radar-scale-bar" aria-hidden="true"></div><div class="radar-scale-labels"><span>-15</span><span>0</span><span>15</span><span>30</span><span>45</span><span>60</span><span>75 dBZ</span></div></div></article></section>
+        <section id="tab-satellite" class="weather-section satellite-section"><div class="section-heading"><div><p class="eyebrow">Topes nubosos · Argentina</p><h3>Satélite</h3></div><p id="satellite-updated" class="muted">—</p></div><p class="section-copy">Se muestra el último cuadro de topes nubosos. La animación se carga bajo demanda.</p><article class="card viewer-card satellite-viewer-card"><div class="viewer-stage"><img id="satellite-image" alt="Imagen satelital meteorológica" referrerpolicy="no-referrer"><div id="satellite-loading" class="viewer-loading">Cargando satélite…</div></div><div class="viewer-toolbar"><button id="satellite-prev" class="control-button" type="button" aria-label="Cuadro anterior">←</button><button id="satellite-play" class="control-button primary-control" type="button">Animar</button><button id="satellite-next" class="control-button" type="button" aria-label="Cuadro siguiente">→</button><div class="viewer-timeline"><strong id="satellite-frame-time">—</strong><span id="satellite-frame-count">—</span></div><span id="satellite-status" class="status-badge">Sin cargar</span></div></article></section>
+      </section>
+      <section class="source-strip" aria-label="Estado de las fuentes"><div class="source-grid"><article class="source-card" data-source="observations"><span class="source-icon">◉</span><div><span>Observaciones</span><strong>Cargando…</strong></div></article><article class="source-card" data-source="forecasts"><span class="source-icon">◷</span><div><span>Pronósticos</span><strong>Cargando…</strong></div></article><article class="source-card" data-source="alerts"><span class="source-icon">△</span><div><span>Alertas</span><strong>Cargando…</strong></div></article><article class="source-card" data-source="radar"><span class="source-icon">⌁</span><div><span>Radar</span><strong>Cargando…</strong></div></article><article class="source-card" data-source="satellite"><span class="source-icon">○</span><div><span>Satélite</span><strong>Cargando…</strong></div></article></div></section>
+    </div>
+  </section>
+  <section class="directory-section" id="paginas"><div class="container"><div class="directory-head"><span class="pill">Directorio WeatherVar</span><h2>Páginas útiles para Argentina</h2><p>Solo accesos que aportan valor para consultar clima, mapas y fuentes.</p></div><div class="directory-grid"><details class="directory-card" open><summary><div><h3>Herramientas meteorológicas</h3><small>6 páginas útiles</small></div></summary><div class="directory-links"><a href="./pronostico/">Pronóstico extendido<span>↗</span></a><a href="./alertas/">Alertas meteorológicas<span>↗</span></a><a href="./radar/">Radar de lluvia<span>↗</span></a><a href="./satelite/">Satélite<span>↗</span></a><a href="./clima-por-localidad/">Clima por localidad<span>↗</span></a><a href="./fuentes/">Fuentes y metodología<span>↗</span></a></div></details><details class="directory-card"><summary><div><h3>Mapas WeatherVar</h3><small>4 páginas útiles</small></div></summary><div class="directory-links"><a href="https://mapa.weathervar.com/">Mapa nacional<span>↗</span></a><a href="https://mundo.weathervar.com/">Mapa mundial<span>↗</span></a><a href="./alertas/">Alertas en Argentina<span>↗</span></a><a href="./radar/">Radar de Argentina<span>↗</span></a></div></details><details class="directory-card"><summary><div><h3>Zonas de Argentina</h3><small>7 páginas útiles</small></div></summary><div class="directory-links"><a href="./amba/">AMBA<span>↗</span></a><a href="./costa-atlantica/">Costa Atlántica<span>↗</span></a><a href="./patagonia/">Patagonia<span>↗</span></a><a href="./norte-argentino/">Norte Argentino<span>↗</span></a><a href="./clima-en-buenos-aires/">Buenos Aires<span>↗</span></a><a href="./clima-en-cordoba/">Córdoba<span>↗</span></a><a href="./clima-en-mendoza/">Mendoza<span>↗</span></a></div></details></div></div></section>
+</main>
+
+<footer class="site-footer">
+  <div class="container footer-grid">
+    <div class="footer-brand">
+      <a class="brand" href="/"><span class="logo-mark" aria-hidden="true"><svg viewBox="0 0 64 64" role="img"><defs><linearGradient id="g" x1="0" x2="1" y1="0" y2="1"><stop stop-color="#fff"/><stop offset="1" stop-color="#b7edff"/></linearGradient></defs><path fill="url(#g)" d="M25 49h25a10 10 0 0 0 1-20 15 15 0 0 0-28-5 12 12 0 0 0 2 25Z" opacity=".96"/><path fill="#fff" d="M19 30a8 8 0 1 0 0-16 8 8 0 0 0 0 16Zm0-20a2 2 0 0 1-2-2V5a2 2 0 1 1 4 0v3a2 2 0 0 1-2 2Zm0 26a2 2 0 0 1 2 2v3a2 2 0 1 1-4 0v-3a2 2 0 0 1 2-2ZM7 22H4a2 2 0 1 1 0-4h3a2 2 0 1 1 0 4Zm28-4h3a2 2 0 1 1 0 4h-3a2 2 0 0 1 0-4ZM9.8 11.7A2 2 0 0 1 12.6 9l2.1 2.1a2 2 0 1 1-2.8 2.8l-2.1-2.1Zm16.5 16.5a2 2 0 0 1 2.8 0l2.1 2.1a2 2 0 1 1-2.8 2.8L26.3 31a2 2 0 0 1 0-2.8ZM9.8 30.3l2.1-2.1a2 2 0 1 1 2.8 2.8l-2.1 2.1a2 2 0 1 1-2.8-2.8Zm16.5-16.5a2 2 0 0 1 0-2.8L28.4 9a2 2 0 1 1 2.8 2.8l-2.1 2.1a2 2 0 0 1-2.8 0Z" opacity=".92"/></svg></span><span><strong>Weather<span>Var</span></strong><small>Clima de Argentina</small></span></a>
+      <p>Pronóstico, condiciones actuales, alertas, radar y satélite para Argentina, organizados en una experiencia simple y rápida.</p>
+    </div>
+    <div class="footer-col"><h3>Proyecto</h3><a href="./fuentes/">Fuentes y metodología</a><a href="./clima-por-localidad/">Clima por localidad</a><a href="./contacto/">Contacto</a></div>
+    <div class="footer-col"><h3>Legal</h3><a href="./aviso-legal/">Aviso legal</a><a href="./privacidad/">Política de privacidad</a><a href="./terminos/">Términos y condiciones</a></div>
+  </div>
+  <div class="container footer-bottom"><span>© 2026 WeatherVar. Todos los derechos reservados.</span><span>Información orientativa. Ante fenómenos severos, consultá canales oficiales.</span></div>
+</footer><a class="back-to-top" href="#top" aria-label="Volver arriba">↑</a>
+<script defer src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script defer src="./assets/js/date-utils.js"></script>
+<script defer src="./assets/js/app.js"></script>
+<script defer src="./assets/js/site-ui.js"></script>
+</body>
+</html>
