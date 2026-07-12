@@ -681,14 +681,16 @@
     elements.alertsTabBadge.textContent = allRecords.length ? String(allRecords.length) : "";
 
     if (!areaIds.length) {
-      elements.localityAlerts.innerHTML = `<div class="locality-alert-summary"><h4>${escapeHtml(displayName(row))}</h4><p>No quedó asociada a un polígono de alerta. La ausencia de asociación no reemplaza la consulta oficial.</p></div>`;
-      elements.summaryAlertBanner.innerHTML = "";
+      const html = `<div class="locality-alert-summary summary-alert-compact neutral-alert"><h4>${escapeHtml(displayName(row))}</h4><p>No quedó asociada a un polígono de alerta. La ausencia de asociación no reemplaza la consulta oficial.</p></div>`;
+      elements.localityAlerts.innerHTML = html;
+      elements.summaryAlertBanner.innerHTML = html;
       return;
     }
 
     if (!allRecords.length) {
-      elements.localityAlerts.innerHTML = `<div class="locality-alert-summary"><h4>Sin alertas activas para ${escapeHtml(displayName(row))}</h4><p>No hay alertas meteorológicas vigentes para esta localidad en la información oficial disponible.</p></div>`;
-      elements.summaryAlertBanner.innerHTML = "";
+      const html = `<div class="locality-alert-summary summary-alert-compact no-alert"><h4>Sin alertas activas para ${escapeHtml(displayName(row))}</h4><p>No hay alertas meteorológicas vigentes para esta localidad en la información oficial disponible.</p></div>`;
+      elements.localityAlerts.innerHTML = html;
+      elements.summaryAlertBanner.innerHTML = html;
       return;
     }
 
@@ -697,10 +699,10 @@
       <h4>Alerta ${escapeHtml(alertLevelName(maxLevel))} para ${escapeHtml(displayName(row))}</h4>
       <p>${escapeHtml(names.join(" · ") || "Fenómeno no informado")} · ${records.length || allRecords.length} registro(s) visible(s).</p>
     </div>`;
-    elements.summaryAlertBanner.innerHTML = `<div class="alert-banner ${levelClass}">
+    elements.summaryAlertBanner.innerHTML = `<div class="alert-banner summary-alert-compact ${levelClass}">
       <span class="alert-symbol">⚠️</span>
       <span><strong>Alerta ${escapeHtml(alertLevelName(maxLevel))}</strong><span>${escapeHtml(names.join(" · ") || "Fenómeno no informado")}</span></span>
-      <a href="#tab-alerts">Ver alertas</a>
+      <a href="#tab-alerts">Ver detalle</a>
     </div>`;
   }
 

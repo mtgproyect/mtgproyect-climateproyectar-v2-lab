@@ -211,9 +211,8 @@
           </nav>
 
           <section id="tab-summary" class="weather-section summary-section">
-            <div id="summary-alert-banner"></div>
-
             <div class="summary-grid">
+              <div class="current-stack">
               <article class="card current-card">
                 <div class="current-main">
                   <div id="current-glyph" class="weather-glyph" aria-hidden="true">
@@ -238,6 +237,8 @@
                   <p id="observation-time" class="muted">—</p>
                 </div>
               </article>
+              <div id="summary-alert-banner" class="summary-alert-slot"></div>
+              </div>
 
               <div class="metrics-grid" aria-label="Detalles de la observación">
                 <article class="metric-card metric-humidity">
@@ -263,15 +264,12 @@
               </div>
             </div>
 
-            <article class="card summary-forecast">
-              <div class="section-heading">
+            <article class="card summary-forecast compact-summary-forecast">
+              <div class="section-heading compact-heading">
                 <div>
                   <p class="eyebrow">Próximos días</p>
-                  <h3>Pronóstico resumido en slides</h3>
+                  <h3>Pronóstico resumido</h3>
                 </div>
-                <a class="text-button" href="#tab-forecast">
-                  Pronóstico completo →
-                </a>
               </div>
               <div id="summary-forecast-grid" class="mini-forecast-grid">
                 <p class="loading-text">Cargando pronóstico…</p>
@@ -317,21 +315,13 @@
               </div>
             </div>
 
-            <div id="locality-alerts" class="locality-alerts">
-              <p class="loading-text">Cargando alertas de la localidad…</p>
-            </div>
+            <div id="locality-alerts" class="locality-alerts" hidden></div>
 
-            <div class="alert-layout">
-              <article class="card map-card alert-map-card">
-                <div class="map-card-head">
-                  <div>
-                    <p class="eyebrow">Mapa nacional</p>
-                    <h4>Áreas con alertas oficiales</h4>
-                  </div>
-                  <p id="map-status" class="map-status">
-                    Cargando mapa temático nacional…
-                  </p>
-                </div>
+            <div class="alert-layout compact-alert-layout">
+              <article class="card map-card alert-map-card compact-alert-map-card">
+                <p id="map-status" class="map-status compact-map-status">
+                  Cargando mapa temático nacional…
+                </p>
 
                 <div class="alert-map-explainer" aria-label="Referencias del mapa de alertas">
                   <article class="legend-card yellow">
@@ -650,10 +640,12 @@
           let isDown = false;
           let startX = 0;
           let scrollLeft = 0;
+          let moved = false;
           element.addEventListener("pointerdown", (event) => {
             if (event.pointerType === "mouse" && event.button !== 0) return;
-            if (event.target.closest("a, button, input, select, textarea")) return;
+            if (event.target.closest("button, input, select, textarea")) return;
             isDown = true;
+            moved = false;
             element.classList.add("is-dragging");
             startX = event.clientX;
             scrollLeft = element.scrollLeft;
@@ -662,9 +654,18 @@
           element.addEventListener("pointermove", (event) => {
             if (!isDown) return;
             const distance = event.clientX - startX;
-            if (Math.abs(distance) > 3) event.preventDefault();
+            if (Math.abs(distance) > 3) {
+              moved = true;
+              event.preventDefault();
+            }
             element.scrollLeft = scrollLeft - distance;
           });
+          element.addEventListener("click", (event) => {
+            if (!moved) return;
+            event.preventDefault();
+            event.stopPropagation();
+            moved = false;
+          }, true);
           const stop = (event) => {
             if (!isDown) return;
             isDown = false;
