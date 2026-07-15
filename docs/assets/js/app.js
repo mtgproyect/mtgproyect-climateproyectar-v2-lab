@@ -401,19 +401,13 @@
   }
 
   function renderRecent() {
-    if (!elements.recentList || !elements.recentSearches) return;
-    const rows = getRecentIds().map((id) => state.rowsById.get(id)).filter(Boolean);
-    elements.recentList.innerHTML = "";
-    rows.forEach((row) => {
-      const button = document.createElement("button");
-      button.type = "button";
-      button.className = "chip";
-      button.textContent = displayName(row);
-      button.title = localityLabel(row);
-      button.addEventListener("click", () => selectLocality(Number(row[COL.id])));
-      elements.recentList.append(button);
-    });
-    elements.recentSearches.hidden = !rows.length;
+    // WeatherVar final: no mostramos las últimas búsquedas en portada.
+    // Conservamos la función para no romper la app original.
+    if (elements.recentList) elements.recentList.innerHTML = "";
+    if (elements.recentSearches) {
+      elements.recentSearches.hidden = true;
+      elements.recentSearches.setAttribute("aria-hidden", "true");
+    }
   }
 
   function setUrl(id) {

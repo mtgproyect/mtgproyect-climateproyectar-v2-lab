@@ -307,3 +307,88 @@ body{font-family:var(--wv-font)!important;}
   width:100%!important;
   text-align:center!important;
 }
+
+
+/* Ajustes finales 2026-07-15: fuentes, radar y últimas búsquedas */
+#recent-searches,
+#recent-list,
+.recent-searches,
+.recent-list{
+  display:none!important;
+  visibility:hidden!important;
+  height:0!important;
+  min-height:0!important;
+  max-height:0!important;
+  overflow:hidden!important;
+  padding:0!important;
+  margin:0!important;
+  border:0!important;
+}
+
+/* El selector de producto de radar no debe salirse del cuadro en móvil */
+.radar-section .section-heading-top,
+.satellite-section .section-heading-top{
+  overflow:hidden!important;
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr) minmax(220px,330px)!important;
+  gap:16px!important;
+  align-items:end!important;
+}
+.product-selector{
+  min-width:0!important;
+  max-width:100%!important;
+  width:100%!important;
+  box-sizing:border-box!important;
+  color:#d7f6ff!important;
+}
+.product-selector select{
+  width:100%!important;
+  max-width:100%!important;
+  min-width:0!important;
+  box-sizing:border-box!important;
+  display:block!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+  border-radius:14px!important;
+}
+@media (max-width: 760px){
+  .radar-section .section-heading-top,
+  .satellite-section .section-heading-top{
+    grid-template-columns:1fr!important;
+    gap:12px!important;
+  }
+  .product-selector select{
+    min-height:58px!important;
+    font-size:1rem!important;
+    padding-left:16px!important;
+    padding-right:38px!important;
+  }
+}
+
+/* Página Fuentes: sin tarjetas de estado, solo metodología y criterio */
+.source-page-grid{
+  display:none!important;
+}
+.legal-card h2 + .source-page-grid{
+  display:none!important;
+}
+
+/* Footer siempre centrado y compacto */
+.compact-footer,
+.footer-inner.compact-footer{
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:center!important;
+  text-align:center!important;
+  gap:16px!important;
+  max-width:900px!important;
+  margin-inline:auto!important;
+}
+.compact-footer .footer-credit{
+  max-width:760px!important;
+  margin:0 auto!important;
+  line-height:1.65!important;
+}
+.compact-footer .footer-links{
+  justify-content:center!important;
+}
