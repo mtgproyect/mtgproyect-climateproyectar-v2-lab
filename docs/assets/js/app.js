@@ -503,6 +503,7 @@
   }
 
   function renderSummaryForecast(days) {
+    if (!elements.summaryForecastGrid) return;
     const visible = days.slice(0, 4);
     elements.summaryForecastGrid.innerHTML = visible.length ? visible.map((day) => {
       const description = dayDescription(day);
@@ -567,7 +568,9 @@
 
   async function loadForecast(row) {
     elements.forecastGrid.innerHTML = '<p class="loading-text">Cargando pronóstico…</p>';
-    elements.summaryForecastGrid.innerHTML = '<p class="loading-text">Cargando pronóstico…</p>';
+    if (elements.summaryForecastGrid) {
+      elements.summaryForecastGrid.innerHTML = '<p class="loading-text">Cargando pronóstico…</p>';
+    }
     try {
       const directory = state.forecastsManifest?.files?.forecasts?.directory || "pronosticos";
       const url = joinUrl(state.config.forecasts.base_url, `${directory}/${Number(row[COL.forecastId])}.json`);
@@ -579,7 +582,9 @@
     } catch (error) {
       console.error(error);
       elements.forecastGrid.innerHTML = '<div class="notice">No se pudo cargar el pronóstico. La observación sigue disponible.</div>';
-      elements.summaryForecastGrid.innerHTML = '<p class="loading-text">Pronóstico temporalmente no disponible.</p>';
+      if (elements.summaryForecastGrid) {
+        elements.summaryForecastGrid.innerHTML = '<p class="loading-text">Pronóstico temporalmente no disponible.</p>';
+      }
     }
   }
 
