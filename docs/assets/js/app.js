@@ -401,6 +401,7 @@
   }
 
   function renderRecent() {
+    if (!elements.recentList || !elements.recentSearches) return;
     const rows = getRecentIds().map((id) => state.rowsById.get(id)).filter(Boolean);
     elements.recentList.innerHTML = "";
     rows.forEach((row) => {
@@ -1500,7 +1501,9 @@
       const stationsValue = await fetchJson(joinUrl(config.observations.base_url, stationsPath), { cacheKey: "observations-stations", version: observationsManifest.generated_at });
       state.stations = stationsValue.records || stationsValue.stations || stationsValue || {};
 
-      elements.localityCount.textContent = `${new Intl.NumberFormat("es-AR").format(state.rows.length)} localidades`;
+      if (elements.localityCount) {
+        elements.localityCount.textContent = `${new Intl.NumberFormat("es-AR").format(state.rows.length)} localidades`;
+      }
       elements.searchStatus.textContent = "Escribí al menos dos letras para buscar.";
       updateSourceCard("observations", observationsManifest);
       updateSourceCard("forecasts", forecastsManifest);
